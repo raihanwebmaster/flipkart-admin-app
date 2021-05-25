@@ -1,11 +1,18 @@
 import React from "react";
-import { Jumbotron } from "react-bootstrap";
+import { Col, Container, Jumbotron, Row } from "react-bootstrap";
 import Layout from "../../components/Layout/Layout";
-
+import './Home.css';
 const Home = () => {
+  
   return (
     <Layout>
-      <Jumbotron
+      <Container fluid>
+        <Row>
+          <Col md={2} className="sidebar">Side bar </Col>
+          <Col md={10} style={{marginLeft:'auto'}}>container</Col>
+        </Row>
+      </Container>
+      {/* <Jumbotron
         style={{ margin: "5rem", background: "#fff" }}
         className="text-center"
       >
@@ -21,7 +28,7 @@ const Home = () => {
           more recently with desktop publishing software like Aldus PageMaker
           including versions of Lorem Ipsum.
         </p>
-      </Jumbotron>
+      </Jumbotron> */}
     </Layout>
   );
 };
