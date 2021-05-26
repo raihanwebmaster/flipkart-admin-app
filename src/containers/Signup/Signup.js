@@ -21,10 +21,11 @@ const Signup = () => {
     }
     dispatch(signup(user));
   }
+
   if (auth.authenticate) {
     return <Redirect to={`/`} />;
   }
-
+  
 
   if(user.loading){
     return  <p>Loading...!</p>
