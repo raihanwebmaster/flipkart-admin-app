@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import { isUserLoggedIn } from "./actions";
 import "./App.css";
 import PrivateRoute from "./components/HOC/PrivateRoute";
+import Category from "./containers/Category/Category";
 import Home from "./containers/Home/Home";
 import Orders from "./containers/Orders/Orders";
 import Products from "./containers/Products/Products";
@@ -22,6 +23,7 @@ function App() {
     <div className="App">
       <Switch>
         <PrivateRoute path="/" exact component={Home} />
+        <PrivateRoute path="/category" exact component={Category} />
         <PrivateRoute path="/products" exact component={Products} />
         <PrivateRoute path="/orders" exact component={Orders} />
         <Route path="/signin" component={Signin} />
