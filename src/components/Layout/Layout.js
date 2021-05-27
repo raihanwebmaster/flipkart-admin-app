@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Col,
-  Container,
-  Jumbotron,
-  Nav,
-  Navbar,
-  NavDropdown,
-  Row,
-} from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Header from "../Header/Header";
 const Layout = (props) => {
@@ -21,6 +13,9 @@ const Layout = (props) => {
               <ul>
                 <li>
                   <NavLink to={`/`}>Home</NavLink>
+                </li>
+                <li>
+                  <NavLink to={`/category`}>Category</NavLink>
                 </li>
                 <li>
                   <NavLink to={`/products`}>Products</NavLink>
