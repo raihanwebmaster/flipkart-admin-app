@@ -22,12 +22,6 @@ const Category = (props) => {
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
     dispatch(addCategory(form));
-    // const cat ={
-    //   categoryName,
-    //   parentCategoryId,
-    //   categoryImage
-    // }
-    // console.log(cat);
     setShow(false);
   };
   const handleShow = () => setShow(true);
