@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route } from "react-router-dom";
-import { isUserLoggedIn } from "./actions";
+import { getAllCategory, getInitialData, isUserLoggedIn } from "./actions";
 import "./App.css";
 import PrivateRoute from "./components/HOC/PrivateRoute";
 import Category from "./containers/Category/Category";
@@ -18,6 +18,9 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
+    // dispatch(getAllCategory());
+    dispatch(getInitialData());
+
   }, []);
   return (
     <div className="App">
