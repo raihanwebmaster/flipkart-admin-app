@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../actions";
+import "./Products.css";
 import Layout from "../../components/Layout/Layout";
 import Input from "../../components/UI/Input/Input";
 import NewModal from "../../components/UI/Modal/modal";
+import { generatePublicUrl } from "../../urlConfig";
 const Products = (props) => {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -13,6 +15,8 @@ const Products = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [productPictures, setProductPictures] = useState([]);
   const [show, setShow] = useState(false);
+  const [productDetailModal, setProductDetailModal] = useState(false);
+  const [productDetails, setProductDetails] = useState(null);
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product);
   const category = useSelector((state) => state.category);
@@ -44,27 +48,28 @@ const Products = (props) => {
   };
   const renderProducts = () => {
     return (
-      <Table responsive="sm">
+      <Table style={{ fontSize: 12 }} responsive="sm">
         <thead>
           <tr>
             <th>#</th>
             <th>Name</th>
             <th>Price</th>
             <th>Quantity</th>
-            <th>Description</th>
             <th>Category</th>
           </tr>
         </thead>
         <tbody>
           {product.products.length > 0
             ? product.products.map((product) => (
-                <tr key={product._id}>
+                <tr
+                  onClick={() => showProductDetailsModal(product)}
+                  key={product._id}
+                >
                   <td>2</td>
                   <td>{product.name}</td>
                   <td>{product.price}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.description}</td>
-                  <td>--</td>
+                  <td>{product.category.name}</td>
                 </tr>
               ))
             : null}
@@ -72,21 +77,9 @@ const Products = (props) => {
       </Table>
     );
   };
-  return (
-    <Layout sidebar>
-      <Container>
-        <Row>
-          <Col md={12}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h3>Products</h3>
-              <button onClick={handleShow}>ADD</button>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>{renderProducts()}</Col>
-        </Row>
-      </Container>
+
+  const renderAddProductModal = () => {
+    return (
       <NewModal
         show={show}
         handleClose={handleClose}
@@ -139,6 +132,84 @@ const Products = (props) => {
           onChange={handleProductPicture}
         />
       </NewModal>
+    );
+  };
+  const handleCloseProductDetailsModal = () => {
+    setProductDetailModal(false);
+  };
+  const showProductDetailsModal = (product) => {
+    setProductDetails(product);
+    setProductDetailModal(true);
+  };
+  const renderProductDetailsModal = () => {
+    if (!productDetails) {
+      return null;
+    }
+    return (
+      <NewModal
+        show={productDetailModal}
+        handleClose={handleCloseProductDetailsModal}
+        modalTitle={"Product Details"}
+        size="lg"
+      >
+        <Row>
+          <Col md="6">
+            <label className="key">Name</label>
+            <p className="value">{productDetails.name}</p>
+          </Col>
+          <Col md="6">
+            <label className="key">Price</label>
+            <p className="value">{productDetails.price}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="6">
+            <label className="key">Quantity</label>
+            <p className="value">{productDetails.quantity}</p>
+          </Col>
+          <Col md="6">
+            <label className="key">Category</label>
+            <p className="value">{productDetails.category.name}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="12">
+            <label className="key">Description</label>
+            <p className="value">{productDetails.description}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <label className="key">Product Picture</label>
+            <div style={{ display: "flex" }}>
+              {productDetails.productPicture.map((picture) => (
+                <div className="productImgContainer">
+                  <img src={generatePublicUrl(picture.img)} alt="img" />
+                </div>
+              ))}
+            </div>
+          </Col>
+        </Row>
+      </NewModal>
+    );
+  };
+  return (
+    <Layout sidebar>
+      <Container>
+        <Row>
+          <Col md={12}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h3>Products</h3>
+              <button onClick={handleShow}>ADD</button>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>{renderProducts()}</Col>
+        </Row>
+      </Container>
+      {renderAddProductModal()}
+      {renderProductDetailsModal()}
     </Layout>
   );
 };
