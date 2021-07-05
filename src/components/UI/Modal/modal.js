@@ -16,8 +16,14 @@ const NewModal = (props) => {
             </Button>
           ))
         ) : (
-          <Button variant="primary" onClick={props.handleClose}>
-            Save Changes
+          <Button
+            {...props}
+            style={{backgroundColor: '#333'}}
+            className="btn-sm"
+            variant="primary"
+            onClick={props.handleClose}
+          >
+            Save
           </Button>
         )}
       </Modal.Footer>
