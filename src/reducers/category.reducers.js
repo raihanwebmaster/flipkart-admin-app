@@ -53,14 +53,14 @@ export default (state = initState, action) => {
       state = {
         ...state,
         categories: action.payload.categories,
-      };
+      }
       break;
 
     case categoryConstants.ADD_NEW_CATEGORY_REQUEST:
       state = {
         ...state,
         loading: true,
-      };
+      }
       break;
 
     case categoryConstants.ADD_NEW_CATEGORY_SUCCESS:
@@ -75,34 +75,34 @@ export default (state = initState, action) => {
         ...state,
         categories: updatedCategory,
         loading: false,
-      };
+      }
       break;
 
     case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
       state = {
         ...initState,
-      };
+      }
       break;
 
     case categoryConstants.UPDATE_CATEGORIES_REQUEST:
       state = {
         ...state,
         loading: true,
-      };
+      }
       break;
 
     case categoryConstants.UPDATE_CATEGORIES_SUCCESS:
       state = {
         ...state,
         loading: false,
-      };
+      }
       break;
 
-    case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
+    case categoryConstants.UPDATE_CATEGORIES_FAILURE:
       state = {
         ...state,
         error: action.payload.error,
-      };
+      }
       break;
   }
   return state;
