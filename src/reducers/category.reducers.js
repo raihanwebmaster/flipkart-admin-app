@@ -8,7 +8,7 @@ const initState = {
 
 const buildNewCategories = (parentId, categories, category) => {
   let myCategories = [];
-  if (parentId == undefined) {
+  if (parentId === undefined) {
     return [
       ...categories,
       {
@@ -30,7 +30,10 @@ const buildNewCategories = (parentId, categories, category) => {
       };
       myCategories.push({
         ...cat,
-        children: cat.children.length > 0 ? [...cat.children,newCategory ] : [newCategory] ,
+        children:
+          cat.children.length > 0
+            ? [...cat.children, newCategory]
+            : [newCategory],
       });
     } else {
       myCategories.push({
@@ -52,12 +55,14 @@ export default (state = initState, action) => {
         categories: action.payload.categories,
       };
       break;
+
     case categoryConstants.ADD_NEW_CATEGORY_REQUEST:
       state = {
         ...state,
         loading: true,
       };
       break;
+
     case categoryConstants.ADD_NEW_CATEGORY_SUCCESS:
       const category = action.payload.category;
       const updatedCategory = buildNewCategories(
@@ -72,9 +77,31 @@ export default (state = initState, action) => {
         loading: false,
       };
       break;
+
     case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
       state = {
         ...initState,
+      };
+      break;
+
+    case categoryConstants.UPDATE_CATEGORIES_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+
+    case categoryConstants.UPDATE_CATEGORIES_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+      };
+      break;
+
+    case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
+      state = {
+        ...state,
+        error: action.payload.error,
       };
       break;
   }

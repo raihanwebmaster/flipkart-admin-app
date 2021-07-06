@@ -131,11 +131,7 @@ const Category = (props) => {
       form.append("parentId", item.parentId ? item.parentId : "");
       form.append("type", item.type);
     });
-    dispatch(updatedCategories(form)).then((result) => {
-      if (result) {
-        dispatch(getAllCategory());
-      }
-    });
+    dispatch(updatedCategories(form))
     setUpdateCategoryModal(false);
   };
 
