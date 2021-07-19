@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import FormImpl from "react-bootstrap/esm/Form";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../components/Layout/Layout";
 import Input from "../../components/UI/Input/Input";
 import NewModal from "../../components/UI/Modal/modal";
 import linearCategoryList from "../../helpers/linearCategories";
+import {createPage} from "../../actions";
 
 const NewPage = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -13,23 +15,57 @@ const NewPage = () => {
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [desc, setDesc] = useState("");
+  const [type, setType] = useState("");
   const [banners, setBanners] = useState([]);
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     setCategories(linearCategoryList(category.categories));
   }, [category]);
+
+  const onCategoryChange = (e) => {
+    const category = categories.find(
+      (category) => category._id == e.target.value
+    );
+    setCategoryId(e.target.value);
+    setType(category.type);
+  };
+
   const handleBannerImages = (e) => {
     console.log(e);
+    setBanners([...banners, e.target.files[0]]);
   };
   const handleProductImages = (e) => {
     console.log(e);
+    setProducts([...products, e.target.files[0]]);
+  };
+
+  const submitPageForm = (e) => {
+    // e.target.preventDefault();
+    if (title === "") {
+      alert("Title is required");
+      setCreateModal(false);
+      return;
+    }
+    const form = new FormData();
+    form.append("title", title);
+    form.append("description", desc);
+    form.append("category", categoryId);
+    form.append("type", type);
+    banners.forEach((banner, index) => {
+      form.append("banners", banner);
+    });
+    products.forEach((product, index) => {
+      form.append("products", product);
+    });
+    dispatch(createPage(form));
   };
   const renderCreatePageModal = () => {
     return (
       <NewModal
         show={createModal}
         modalTitle={"Create New Page"}
-        handleClose={() => setCreateModal(false)}
+        handleClose={submitPageForm}
       >
         <Container>
           <Row>
@@ -37,7 +73,7 @@ const NewPage = () => {
               <select
                 className="form-control form-control-sm"
                 value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
+                onChange={onCategoryChange}
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
@@ -68,24 +104,38 @@ const NewPage = () => {
               ></Input>
             </Col>
           </Row>
+          {banners.length > 0 ? 
+          banners.map((banner, index) => (
+                <Row key={index}>
+                  <Col>{banner.name}</Col>
+                </Row>
+              ))
+            : null}
           <Row>
             <Col>
-              <input
-                className="form-control form-control-sm"
+              <Input
+                className="form-control"
                 type="file"
                 name="banners"
                 onChange={handleBannerImages}
-              ></input>
+              ></Input>
             </Col>
           </Row>
+          {products.length > 0
+            ? products.map((product, index) => (
+                <Row key={index}>
+                  <Col>{product.name}</Col>
+                </Row>
+              ))
+            : null}
           <Row>
             <Col>
-              <input
-                className="form-control form-control-sm"
+              <Input
+                className="form-control "
                 type="file"
                 name="products"
                 onChange={handleProductImages}
-              ></input>
+              ></Input>
             </Col>
           </Row>
         </Container>
