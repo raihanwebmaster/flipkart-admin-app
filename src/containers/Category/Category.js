@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,7 +17,7 @@ import {
   IoIosArrowDown,
   IoIosAdd,
   IoIosTrash,
-  IoIosCloudUpload
+  IoIosCloudUpload,
 } from "react-icons/io";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import UpdateCategoriesModal from "./components/UpdateCategoiresModal";
@@ -38,8 +38,19 @@ const Category = (props) => {
   const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!category.loading) {
+      setShow(false);
+    }
+  }, [category.loading]);
   const handleClose = () => {
     const form = new FormData();
+
+    if (categoryName === "") {
+      alert("Category name is required");
+      setShow(false);
+      return;
+    }
     form.append("name", categoryName);
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
@@ -120,6 +131,7 @@ const Category = (props) => {
   };
   const updateCategoryForm = () => {
     const form = new FormData();
+    
     expandedArray.forEach((item, index) => {
       form.append("_id", item.value);
       form.append("name", item.name);
@@ -132,7 +144,7 @@ const Category = (props) => {
       form.append("parentId", item.parentId ? item.parentId : "");
       form.append("type", item.type);
     });
-    dispatch(updatedCategories(form))
+    dispatch(updatedCategories(form));
     setUpdateCategoryModal(false);
   };
 
@@ -202,9 +214,18 @@ const Category = (props) => {
               <h3>Category</h3>
               <div className="actionBtnContainer">
                 <span>Actions:</span>
-                <button onClick={handleShow}><IoIosAdd /><span>ADD</span></button>
-                <button onClick={deleteCategory}><IoIosTrash /><span>Delete</span></button>
-                <button onClick={updateCategory}><IoIosCloudUpload /><span>Edit</span></button>
+                <button onClick={handleShow}>
+                  <IoIosAdd />
+                  <span>ADD</span>
+                </button>
+                <button onClick={deleteCategory}>
+                  <IoIosTrash />
+                  <span>Delete</span>
+                </button>
+                <button onClick={updateCategory}>
+                  <IoIosCloudUpload />
+                  <span>Edit</span>
+                </button>
               </div>
             </div>
           </Col>
@@ -232,7 +253,8 @@ const Category = (props) => {
       </Container>
       <AddCategoryModal
         show={show}
-        handleClose={handleClose}
+        handleClose={() => setShow(false)}
+        onSubmit={handleClose}
         modalTitle={"Add New Category"}
         categoryName={categoryName}
         setCategoryName={setCategoryName}
@@ -243,7 +265,8 @@ const Category = (props) => {
       />
       <UpdateCategoriesModal
         show={updateCategoryModal}
-        handleClose={updateCategoryForm}
+        handleClose={() => setUpdateCategoryModal(false)}
+        onSubmit={updateCategoryForm}
         modalTitle={"UpdateCategories"}
         size="lg"
         expandedArray={expandedArray}

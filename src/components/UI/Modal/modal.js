@@ -21,7 +21,7 @@ const NewModal = (props) => {
             style={{backgroundColor: '#333'}}
             className="btn-sm"
             variant="primary"
-            onClick={props.handleClose}
+            onClick={props.onSubmit}
           >
             Save
           </Button>
