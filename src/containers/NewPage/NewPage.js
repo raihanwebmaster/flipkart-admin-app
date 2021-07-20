@@ -6,7 +6,7 @@ import Layout from "../../components/Layout/Layout";
 import Input from "../../components/UI/Input/Input";
 import NewModal from "../../components/UI/Modal/modal";
 import linearCategoryList from "../../helpers/linearCategories";
-import {createPage} from "../../actions";
+import { createPage } from "../../actions";
 
 const NewPage = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -19,13 +19,26 @@ const NewPage = () => {
   const [banners, setBanners] = useState([]);
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
+  const page = useSelector((state) => state.page);
   useEffect(() => {
     setCategories(linearCategoryList(category.categories));
   }, [category]);
 
+  useEffect(() => {
+    console.log(page);
+    if (!page.loading) {
+      setCreateModal(false);
+      setTitle("");
+      setDesc("");
+      setCategoryId("");
+      setProducts("");
+      setBanners("");
+    }
+  }, [page]);
+
   const onCategoryChange = (e) => {
     const category = categories.find(
-      (category) => category._id == e.target.value
+      (category) => category.value === e.target.value
     );
     setCategoryId(e.target.value);
     setType(category.type);
@@ -65,12 +78,13 @@ const NewPage = () => {
       <NewModal
         show={createModal}
         modalTitle={"Create New Page"}
-        handleClose={submitPageForm}
+        handleClose={() => setCreateModal(false)}
+        onSubmit={submitPageForm}
       >
         <Container>
           <Row>
             <Col>
-              <select
+              {/* <select
                 className="form-control form-control-sm"
                 value={categoryId}
                 onChange={onCategoryChange}
@@ -81,7 +95,14 @@ const NewPage = () => {
                     {cat.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+              <Input
+                type="select"
+                value={categoryId}
+                onChange={onCategoryChange}
+                options={categories}
+                placeholder={"Select Category"}
+              />
             </Col>
           </Row>
           <Row>
@@ -104,8 +125,8 @@ const NewPage = () => {
               ></Input>
             </Col>
           </Row>
-          {banners.length > 0 ? 
-          banners.map((banner, index) => (
+          {banners.length > 0
+            ? banners.map((banner, index) => (
                 <Row key={index}>
                   <Col>{banner.name}</Col>
                 </Row>
@@ -144,8 +165,14 @@ const NewPage = () => {
   };
   return (
     <Layout sidebar>
-      {renderCreatePageModal()}
-      <button onClick={() => setCreateModal(true)}>Create Page</button>
+      {page.loading ? (
+        <p> Creating Page ... please wait </p>
+      ) : (
+        <>
+          {renderCreatePageModal()}
+          <button onClick={() => setCreateModal(true)}>Create Page</button>
+        </>
+      )}
     </Layout>
   );
 };

@@ -19,10 +19,11 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
-    // dispatch(getAllCategory());
-    dispatch(getInitialData());
-
-  }, []);
+    if (auth.authenticate) {
+      dispatch(getInitialData());
+    }
+    
+  }, [auth.authenticate]);
   return (
     <div className="App">
       <Switch>
