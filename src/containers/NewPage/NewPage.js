@@ -118,7 +118,7 @@ const NewPage = (props) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={"Page Title"}
-                className=""
+                className="form-control-sm"
               />
             </Col>
           </Row>
@@ -128,8 +128,8 @@ const NewPage = (props) => {
               <Input
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                placeholder={"Page Desc"}
-                className=""
+                placeholder={"Page Description"}
+                className="form-control-sm"
               />
             </Col>
           </Row>
